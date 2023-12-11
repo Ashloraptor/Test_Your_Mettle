@@ -12,22 +12,22 @@ var questions = [
   {
     question1: "What keyword is used for variables?",
     answers1: ["v", "variable", "var", "bar"],
-    correct1: "C"
+    correct1: "var"
   },
   {
     question2: "What punctuation is used to end a line of code?",
     answers2: [".", "$", ";", "!"],
-    correct2: "C"
+    correct2: ";"
   },
   {
     question3: 'What value type is in variable var= "Hello World"; ?',
     answers3: ["Boolean", "Integer", "String", "Quote"],
-    correct3: "C"
+    correct3: "String"
   },
   {
     question4: "What is the value of the first item in an array?",
     answers4: ["1", "A", "0", "None of the above"],
-    correct4: "C"
+    correct4: "0"
   }
 ];
 
@@ -37,11 +37,16 @@ var answersThree = questions[2].answers3;
 var answersFour = questions[3].answers4;
 var numQuestion = 0;
 
+var correctOne = questions[0].correct1;
+var correctTwo = questions[1].correct2;
+var correctThree = questions[2].correct3;
+var correctFour = questions[3].correct4;
+
 var nextBtn = document.querySelector("#nextBtn");
 
 
 
-var isRight;
+var score = 0;
 var timer;
 var timerCount;
 
@@ -56,7 +61,7 @@ function init() {
 
 // The startGame function is called when the start button is clicked
 function startQuiz() {
-  isRight = 0;
+  score = 0;
   timerCount = 60;
   // Hides start button when quiz is in progress
   startButton.hidden = true;
@@ -96,26 +101,30 @@ function renderQuestion( yourQuestion, answersOne) {
   for (var i = 0; i < 4; i++) {
     console.log(answersOne);
     answers.push(
-      '<input type="radio" name="question" value="value="' + 
+      '<input type="radio" name="question" value="' + 
       answersOne[i]+ '">' + answersOne[i]
     );
   }
- 
   container.innerHTML=answers.join("");
   
 }
 
 
 function nextQuestion() {
-  //checkCorrect();
-  renderQuestion(questions[1].question2, answersTwo);
-}
-
-
-function nextQuestion() {
   numQuestion++;
   if (numQuestion == 1){
-    console.log("two")
+    var userAnswer = document.querySelector('input[name="question"]:checked');
+    console.log(userAnswer.value);
+
+    if(userAnswer.value === questions[0].correct1){
+      score++; 
+      console.log("correct");
+      console.log(score);
+    }else{
+      console.log("wrong");
+      console.log(score); timerCount -5;
+    }
+
     renderQuestion(questions[1].question2, answersTwo);
   }
   else if (numQuestion == 2){
@@ -123,15 +132,13 @@ function nextQuestion() {
   }
   else if (numQuestion == 3){
     renderQuestion(questions[3].question4, answersFour);
+    nextButton.hidden = true;
+    submitButton.hidden = false;
   }
   }
 
-
-//Checks if correct
 /*function checkCorrect() {
-   //If the choice selected equals the correct answer, set isRight to true
-  if (questions[0].correct1 === checked) {
-    // then add 1 to isRight and commit to local storage
+  if(answersOne == correctOne) {
     isRight++;
     localStorage.setItem("correct", isRight);
   } else {
@@ -139,6 +146,19 @@ function nextQuestion() {
   }
 }*/
 
+
+//Checks if correct
+/*function checkCorrect() {
+   //If the choice selected equals the correct answer, set isRight to +1
+  if (questions[0].correct1 === true) {
+    // then add 1 to isRight and commit to local storage
+    isRight++;
+    localStorage.setItem("correct", isRight);
+  } else {
+    timerCount -5;
+  }
+}
+*/
 
 
 //commit initials to local storage
@@ -149,4 +169,5 @@ init();
 startButton.addEventListener("click", startQuiz);
 
 nextButton.addEventListener("click", nextQuestion);
+//nextButton.addEventListener("click", checkCorrect);
 //submitButton.addEventListener("click", endQuiz);
