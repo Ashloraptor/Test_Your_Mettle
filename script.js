@@ -1,14 +1,11 @@
-//query select button
 var startButton = document.querySelector(".start-button");
 var nextButton = document.querySelector(".next-button");
 var submitButton = document.querySelector(".submit-button");
 var timerElement = document.querySelector(".timer-count");
 var cardTimer = document.querySelector(".card");
-
 var container = document.querySelector(".container");
-//var questions = document.querySelector(".questions");
-//var for questions
-//with corresponding series of options
+
+//Questions object, with corresponding answers
 var questions = [
   {
     question1: "What keyword is used for variables?",
@@ -35,7 +32,6 @@ var questions = [
 var score = 0;
 var timer;
 var timerCount;
-
 
 var answersOne = questions[0].answers1;
 var answersTwo = questions[1].answers2;
@@ -74,139 +70,89 @@ function startQuiz() {
 
 //Timer
 function startTimer() {
-  // Sets timer
   timer = setInterval(function () {
     timerCount--;
     timerElement.textContent = timerCount;
 
     // Tests if time has run out
     if (timerCount === 0) {
-      // Clears interval
       clearInterval(timer);
       endQuiz();
     }
   }, 1000);
 }
 
-//Presents the first questions after Start is selected
-
+//Presents the questions after Start is selected
 answersOne = questions[0].answers1;
 var theQuestion = document.querySelector(".theQuestion");
 
-function renderQuestion( yourQuestion, answersOne) {
+function renderQuestion(yourQuestion, answersOne) {
   theQuestion.innerHTML = yourQuestion;
- //clears answers
-  answers=[];
-  //for each question
+  answers = [];
   for (var i = 0; i < 4; i++) {
-    console.log(answersOne);
+
     answers.push(
-      '<input type="radio" name="question" value="' + 
-      answersOne[i]+ '">' + answersOne[i]
+      '<input type="radio" name="question" value="' +
+      answersOne[i] + '">' + answersOne[i]
     );
   }
-  container.innerHTML=answers.join("");
-  
-}
+  container.innerHTML = answers.join("");
 
+}
 
 function nextQuestion() {
   numQuestion++;
-  if (numQuestion == 1){
+  if (numQuestion == 1) {
     //measures user selection
     var userAnswer = document.querySelector('input[name="question"]:checked');
-    console.log(userAnswer.value);
-      //checks if correct
-    if(userAnswer.value === questions[0].correct1){
-      score++; 
-      console.log("correct");
-      console.log(score);
-    }else{
-      console.log("wrong");
-      console.log(score); timerCount -=5;
+    //checks if correct
+    if (userAnswer.value === questions[0].correct1) {
+      score++;
+
+    } else {
+      timerCount -= 5;
     }
-      //shows next question
+    //shows next question
     renderQuestion(questions[1].question2, answersTwo);
   }
-  else if (numQuestion == 2){
 
+  else if (numQuestion == 2) {
     var userAnswer = document.querySelector('input[name="question"]:checked');
-    console.log(userAnswer.value);
-      
-      if(userAnswer.value === questions[1].correct2){
-        score++; 
-        console.log("correct");
-        console.log(score);
-      }else{
-        console.log("wrong");
-        console.log(score); timerCount -=5;
-      }
-
+    if (userAnswer.value === questions[1].correct2) {
+      score++;
+    } else {
+      timerCount -= 5;
+    }
     renderQuestion(questions[2].question3, answersThree);
   }
-  else if (numQuestion == 3){
 
+  else if (numQuestion == 3) {
     var userAnswer = document.querySelector('input[name="question"]:checked');
-    console.log(userAnswer.value);
-
-    if(userAnswer.value === questions[2].correct3){
-      score++; 
-      console.log("correct");
-      console.log(score);
-    }else{
-      console.log("wrong");
-      console.log(score); timerCount -=5;
+    if (userAnswer.value === questions[2].correct3) {
+      score++;
+    } else {
+      timerCount -= 5;
     }
-
     renderQuestion(questions[3].question4, answersFour);
   }
 
   else if (numQuestion == 4) {
-
     var userAnswer = document.querySelector('input[name="question"]:checked');
-    console.log(userAnswer.value);
-
-    if(userAnswer.value === questions[3].correct4){
-      score++; 
-      console.log("correct");
-      console.log(score);
-    }else{
-      console.log("wrong");
-      console.log(score); timerCount -=5;
+    if (userAnswer.value === questions[3].correct4) {
+      score++;
+    } else {
+      timerCount -= 5;
     }
-
     nextButton.hidden = true;
     submitButton.hidden = false;
   }
-  }
-
-
-  var userInit;
-//Get scores from local storage
-const myUserScores = JSON.parse(localStorage.getItem("userScores")) || [];
-
-//commit initials to local storage
-function submitScore() {
-var userScore = {
-  theUser: userInit,
-  theUserScore: score
-};
-
-myUserScores.push(userScore);
-
-myUserScores.sort((a,b) => b.sudentScore - a.studentScore);
-
-myUserScores.splice(10);
-
-localStorage.setItem("userScores", JSON.stringify(myUserScores) );
- // endQuiz()
-
 }
+
 
 function endQuiz() {
   userInit = window.prompt("Please enter your initials.");
-  /*localStorage.setItem("Initials", userInit);
-  localStorage.setItem("Score", score);*/
+  localStorage.setItem("Initials", userInit);
+  localStorage.setItem("Score", score);
   window.alert("Thank you for participating!");
   theQuestion.hidden = true;
   container.hidden = true;
@@ -219,7 +165,5 @@ function endQuiz() {
 init();
 // Attach event listener to start button to call startGame function on click
 startButton.addEventListener("click", startQuiz);
-
 nextButton.addEventListener("click", nextQuestion);
-
-submitButton.addEventListener("click", submitScore);
+submitButton.addEventListener("click", endQuiz);
