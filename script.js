@@ -3,6 +3,7 @@ var startButton = document.querySelector(".start-button");
 var nextButton = document.querySelector(".next-button");
 var submitButton = document.querySelector(".submit-button");
 var timerElement = document.querySelector(".timer-count");
+var cardTimer = document.querySelector(".card");
 
 var container = document.querySelector(".container");
 //var questions = document.querySelector(".questions");
@@ -31,6 +32,11 @@ var questions = [
   }
 ];
 
+var score = 0;
+var timer;
+var timerCount;
+
+
 var answersOne = questions[0].answers1;
 var answersTwo = questions[1].answers2;
 var answersThree = questions[2].answers3;
@@ -43,13 +49,6 @@ var correctThree = questions[2].correct3;
 var correctFour = questions[3].correct4;
 
 var nextBtn = document.querySelector("#nextBtn");
-
-
-
-var score = 0;
-var timer;
-var timerCount;
-
 
 //init function
 function init() {
@@ -84,6 +83,7 @@ function startTimer() {
     if (timerCount === 0) {
       // Clears interval
       clearInterval(timer);
+      endQuiz();
     }
   }, 1000);
 }
@@ -113,55 +113,107 @@ function renderQuestion( yourQuestion, answersOne) {
 function nextQuestion() {
   numQuestion++;
   if (numQuestion == 1){
+    //measures user selection
     var userAnswer = document.querySelector('input[name="question"]:checked');
     console.log(userAnswer.value);
-
+      //checks if correct
     if(userAnswer.value === questions[0].correct1){
       score++; 
       console.log("correct");
       console.log(score);
     }else{
       console.log("wrong");
-      console.log(score); timerCount -5;
+      console.log(score); timerCount -=5;
     }
-
+      //shows next question
     renderQuestion(questions[1].question2, answersTwo);
   }
   else if (numQuestion == 2){
+
+    var userAnswer = document.querySelector('input[name="question"]:checked');
+    console.log(userAnswer.value);
+      
+      if(userAnswer.value === questions[1].correct2){
+        score++; 
+        console.log("correct");
+        console.log(score);
+      }else{
+        console.log("wrong");
+        console.log(score); timerCount -=5;
+      }
+
     renderQuestion(questions[2].question3, answersThree);
   }
   else if (numQuestion == 3){
+
+    var userAnswer = document.querySelector('input[name="question"]:checked');
+    console.log(userAnswer.value);
+
+    if(userAnswer.value === questions[2].correct3){
+      score++; 
+      console.log("correct");
+      console.log(score);
+    }else{
+      console.log("wrong");
+      console.log(score); timerCount -=5;
+    }
+
     renderQuestion(questions[3].question4, answersFour);
+  }
+
+  else if (numQuestion == 4) {
+
+    var userAnswer = document.querySelector('input[name="question"]:checked');
+    console.log(userAnswer.value);
+
+    if(userAnswer.value === questions[3].correct4){
+      score++; 
+      console.log("correct");
+      console.log(score);
+    }else{
+      console.log("wrong");
+      console.log(score); timerCount -=5;
+    }
+
     nextButton.hidden = true;
     submitButton.hidden = false;
   }
   }
 
-/*function checkCorrect() {
-  if(answersOne == correctOne) {
-    isRight++;
-    localStorage.setItem("correct", isRight);
-  } else {
-    timerCount -5;
-  }
-}*/
 
-
-//Checks if correct
-/*function checkCorrect() {
-   //If the choice selected equals the correct answer, set isRight to +1
-  if (questions[0].correct1 === true) {
-    // then add 1 to isRight and commit to local storage
-    isRight++;
-    localStorage.setItem("correct", isRight);
-  } else {
-    timerCount -5;
-  }
-}
-*/
-
+  var userInit;
+//Get scores from local storage
+const myUserScores = JSON.parse(localStorage.getItem("userScores")) || [];
 
 //commit initials to local storage
+function submitScore() {
+var userScore = {
+  theUser: userInit,
+  theUserScore: score
+};
+
+myUserScores.push(userScore);
+
+myUserScores.sort((a,b) => b.sudentScore - a.studentScore);
+
+myUserScores.splice(10);
+
+localStorage.setItem("userScores", JSON.stringify(myUserScores) );
+ // endQuiz()
+
+}
+
+function endQuiz() {
+  userInit = window.prompt("Please enter your initials.");
+  /*localStorage.setItem("Initials", userInit);
+  localStorage.setItem("Score", score);*/
+  window.alert("Thank you for participating!");
+  theQuestion.hidden = true;
+  container.hidden = true;
+  nextBtn.hidden = true;
+  submitButton.hidden = true;
+  cardTimer.hidden = true;
+}
 
 //Calls init function at page load
 init();
@@ -169,5 +221,5 @@ init();
 startButton.addEventListener("click", startQuiz);
 
 nextButton.addEventListener("click", nextQuestion);
-//nextButton.addEventListener("click", checkCorrect);
-//submitButton.addEventListener("click", endQuiz);
+
+submitButton.addEventListener("click", submitScore);

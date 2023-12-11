@@ -1,15 +1,5 @@
 # Test_Your_Mettle
-A timed quiz covering some coding basics
-
-
-GIVEN I am taking a code quiz
-WHEN I click the start button
-THEN a timer starts and I am presented with a question
-WHEN I answer a question
-THEN I am presented with another question
-WHEN I answer a question incorrectly
-THEN time is subtracted from the clock
-WHEN all questions are answered or the timer reaches 0
-THEN the game is over
-WHEN the game is over
-THEN I can save my initials and score
+A timed quiz covering some coding basics.
+User has 60 seconds after selecting Start to answer and submit questions.
+Incorrect submissions deduct 5 seconds from the timer.
+After either time runs out or user submits answers, user is prompted to enter initials. Users input and score is logged to the local storage. 
